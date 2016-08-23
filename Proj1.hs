@@ -3,7 +3,7 @@ module Proj1 (feedback, initialGuess, nextGuess, GameState) where
 import Data.List
 import Card
 
-data GameState = Void
+data GameState = GameState [[Card]]
 
 -- |Given two lists sorted in ascending order, count the number of elements
 --  that are equal, without repitition
@@ -71,10 +71,27 @@ feedback ts gs
                                     numHigherRank ts (getMaxRank gs),
                                     numSameSuit ts gs)
 
+chooseN :: (Eq a) => [a] -> Int -> [[a]]
+chooseN ls n
+    | n <= 0     = error "cannot choose for a number less than or equal to 0"
+    | n == 1     = [[x] | x <- ls]
+    | otherwise  = nub [x:others | x <- ls, others <- (chooseN (delete x ls) (n-1))]
+
 initialGuess :: Int -> ([Card],GameState)
-initialGuess _ = ([], Void)
--- TODO
+initialGuess x
+    | x <= 0     = error "card number must be a positive integer"
+    | otherwise  = (first, GameState others)
+        where all_combinations = chooseN [minBound..maxBound] x
+              first = head all_combinations
+              others = tail all_combinations
+
+satisfyFeedback :: (Int,Int,Int,Int,Int) -> [Card] -> [Card] -> Bool
+satisfyFeedback lastFeedback lastGuess newGuess
+    = lastFeedback == (feedback newGuess lastGuess)
 
 nextGuess :: ([Card],GameState) -> (Int,Int,Int,Int,Int) -> ([Card],GameState)
-nextGuess _ _ = ([], Void)
--- TODO
+nextGuess (lastGuess, (GameState possible)) feedback
+    = (nextPick, GameState nextPossible)
+        where nextPossible = filter (satisfyFeedback feedback lastGuess) possible
+              nextPick = head nextPossible
+              others = tail nextPossible
