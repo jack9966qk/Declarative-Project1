@@ -4,6 +4,7 @@ import Data.List
 import Card
 
 data GameState = GameState [[Card]]
+    deriving (Show)
 
 -- |Given two lists sorted in ascending order, count the number of elements
 --  that are equal, without repitition
@@ -73,7 +74,7 @@ feedback ts gs
 
 chooseN :: (Eq a) => [a] -> Int -> [[a]]
 chooseN ls n
-    | n <= 0     = error "cannot choose for a number less than or equal to 0"
+    | n <= 0     = error "n must be a positive integer"
     | n == 1     = [[x] | x <- ls]
     | otherwise  = nub [x:others | x <- ls, others <- (chooseN (delete x ls) (n-1))]
 
@@ -82,16 +83,35 @@ initialGuess x
     | x <= 0     = error "card number must be a positive integer"
     | otherwise  = (first, GameState others)
         where all_combinations = chooseN [minBound..maxBound] x
-              first = head all_combinations
-              others = tail all_combinations
+              first = if x == 2 then [Card Club R5, Card Diamond R10]
+                      else (chooseGuess . computeNumAnswers) all_combinations
+              others = delete first all_combinations
 
 satisfyFeedback :: (Int,Int,Int,Int,Int) -> [Card] -> [Card] -> Bool
 satisfyFeedback lastFeedback lastGuess newGuess
     = lastFeedback == (feedback newGuess lastGuess)
 
+binFeedbacks :: [Card] -> [[Card]] -> [Int]
+binFeedbacks guess others = map length grouped
+    where grouped = (group . sort) [feedback answer guess | answer <- others]
+
+magicFormula :: [Int] -> Int
+magicFormula bin = (sum (map (^2) bin)) `div` (sum bin)
+
+getNumPossibleAnswer :: [Card] -> [[Card]] -> Int
+getNumPossibleAnswer g gs = magicFormula (binFeedbacks g gs)
+
+computeNumAnswers :: [[Card]] -> [([Card], Int)]
+computeNumAnswers guesses
+    = [(x, getNumPossibleAnswer x (delete x guesses)) | x <- guesses]
+
+chooseGuess :: [([Card], Int)] -> [Card]
+chooseGuess guesses = (fst . head . (sortBy compFunc)) guesses
+    where compFunc x y = (snd x) `compare` (snd y)
+
 nextGuess :: ([Card],GameState) -> (Int,Int,Int,Int,Int) -> ([Card],GameState)
 nextGuess (lastGuess, (GameState possible)) feedback
     = (nextPick, GameState nextPossible)
         where nextPossible = filter (satisfyFeedback feedback lastGuess) possible
-              nextPick = head nextPossible
-              others = tail nextPossible
+              nextPick = (chooseGuess . computeNumAnswers) nextPossible
+              others = delete nextPick nextPossible
