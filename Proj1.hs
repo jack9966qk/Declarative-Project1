@@ -6,6 +6,9 @@ import Card
 data GameState = GameState [[Card]]
     deriving (Show)
 
+threshold :: Int
+threshold = 2000
+
 allCards :: [Card]
 allCards = [minBound .. maxBound]
 
@@ -100,15 +103,10 @@ initialGuess x
               others = delete guess allCombinations
 
 
-
-takeNth :: Int -> [t] -> [t]
-takeNth 1 (x:xs) = [x]
-takeNth n (x:xs) = takeNth (n-1) xs
-
 everyNthRec :: Int -> [t] -> [t] -> [t]
 everyNthRec n picked lst
  | n > length(lst)  =  picked
- | otherwise        =  everyNthRec n (picked ++ (takeNth n lst)) (drop n lst)
+ | otherwise        =  everyNthRec n (picked ++ [lst!!(n-1)]) (drop n lst)
 
 everyNth :: Int -> [t] -> [t]
 everyNth n (x:xs)
@@ -143,11 +141,14 @@ computeNumAnswers guesses
     = [(x, getNumPossibleAnswer x (delete x guesses)) | x <- guesses]
 
 chooseGuess :: [([Card], Int)] -> [Card]
-chooseGuess guesses = (fst . head . (sortBy compFunc)) guesses
+chooseGuess guesses = (fst . (minimumBy compFunc)) guesses
     where compFunc x y = (snd x) `compare` (snd y)
 
 nextGuess :: ([Card],GameState) -> (Int,Int,Int,Int,Int) -> ([Card],GameState)
 nextGuess (lastGuess, (GameState possible)) feedback
     = (nextPick, GameState nextPossible)
         where nextPossible = filter (satisfyFeedback feedback lastGuess) possible
-              nextPick = head nextPossible -- (chooseGuess . computeNumAnswers) nextPossible
+              -- nextPick = head nextPossible
+              nextPick = if length nextPossible > threshold
+                         then head nextPossible
+                         else (chooseGuess . computeNumAnswers) nextPossible
