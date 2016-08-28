@@ -6,6 +6,15 @@ import Card
 data GameState = GameState [[Card]]
     deriving (Show)
 
+allCards :: [Card]
+allCards = [minBound .. maxBound]
+
+allRanks :: [Rank]
+allRanks = [minBound .. maxBound]
+
+allSuits :: [Suit]
+allSuits = [minBound .. maxBound]
+
 -- |Given two lists sorted in ascending order, count the number of elements
 --  that are equal, without repitition
 countEq :: (Eq t, Ord t) => [t] -> [t] -> Int
@@ -72,20 +81,48 @@ feedback ts gs
                                     numHigherRank ts (getMaxRank gs),
                                     numSameSuit ts gs)
 
-chooseN :: (Eq a) => [a] -> Int -> [[a]]
-chooseN ls n
-    | n <= 0     = error "n must be a positive integer"
-    | n == 1     = [[x] | x <- ls]
-    | otherwise  = nub [x:others | x <- ls, others <- (chooseN (delete x ls) (n-1))]
+chooseK :: (Eq a) => [a] -> Int -> [[a]]
+chooseK ls k
+    | k <= 0         = error "n must be a positive integer"
+    | k > length ls  = error "n must be less than or equal to length of list"
+    | k == length ls = [ls]
+    | k == 1         = [[x] | x <- ls]
+    | otherwise      = [first:comb | comb <- chooseK others (k-1)] ++ chooseK others k
+        where first = head ls
+              others = tail ls
 
 initialGuess :: Int -> ([Card],GameState)
 initialGuess x
     | x <= 0     = error "card number must be a positive integer"
-    | otherwise  = (first, GameState others)
-        where all_combinations = chooseN [minBound..maxBound] x
-              first = if x == 2 then [Card Club R5, Card Diamond R10]
-                      else (chooseGuess . computeNumAnswers) all_combinations
-              others = delete first all_combinations
+    | otherwise  = (guess, GameState others)
+        where allCombinations = chooseK allCards x
+              guess = getInitialGuess x
+              others = delete guess allCombinations
+
+
+
+takeNth :: Int -> [t] -> [t]
+takeNth 1 (x:xs) = [x]
+takeNth n (x:xs) = takeNth (n-1) xs
+
+everyNthRec :: Int -> [t] -> [t] -> [t]
+everyNthRec n picked lst
+ | n > length(lst)  =  picked
+ | otherwise        =  everyNthRec n (picked ++ (takeNth n lst)) (drop n lst)
+
+everyNth :: Int -> [t] -> [t]
+everyNth n (x:xs)
+ | n <= 0     = error "n is not greater than 0"
+ | otherwise  = everyNthRec n [] (x:xs)
+
+
+
+getInitialGuess :: Int -> [Card]
+getInitialGuess n = [Card (suits!!i) (ranks!!i) | i <- [0..n-1]]
+    where f ls n = max ((length ls) `div` (n+1)) 1
+          suits = cycle (everyNth (f allSuits n) allSuits)
+          ranks = cycle (everyNth (f allRanks n) allRanks)
+
 
 satisfyFeedback :: (Int,Int,Int,Int,Int) -> [Card] -> [Card] -> Bool
 satisfyFeedback lastFeedback lastGuess newGuess
@@ -113,5 +150,4 @@ nextGuess :: ([Card],GameState) -> (Int,Int,Int,Int,Int) -> ([Card],GameState)
 nextGuess (lastGuess, (GameState possible)) feedback
     = (nextPick, GameState nextPossible)
         where nextPossible = filter (satisfyFeedback feedback lastGuess) possible
-              nextPick = (chooseGuess . computeNumAnswers) nextPossible
-              others = delete nextPick nextPossible
+              nextPick = head nextPossible -- (chooseGuess . computeNumAnswers) nextPossible
