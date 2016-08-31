@@ -55,8 +55,8 @@ guessTest answerString = do
 --   commentary as it goes.
 main :: IO ()
 main = do
-  args <- getArgs
-  let answer = map read args
+  --args <- getArgs
+  let answer = [Card Club R6, Card Heart R10, Card Spade R7, Card Heart King]
   if validSelection answer then do
       let (guess,other) = initialGuess $ length answer
       loop answer guess other 1
