@@ -8,7 +8,7 @@ data GameState = GameState [[Card]]
     deriving (Show)
 
 threshold :: Int
-threshold = 10000
+threshold = 1250
 
 allCards :: [Card]
 allCards = [minBound .. maxBound]
@@ -74,66 +74,26 @@ numHigherRank :: [Card] -> Rank -> Int
 numHigherRank cards max = length (filter (\c -> (getRank c) > max) cards)
 
 
---takeWhile' _ [] = (0, [])
---takeWhile' f (x:xs) = if f x
---  then (1+n, ls)
---  else (0, x:xs)
---  where (n, ls) = takeWhile' f xs
-
-
----- (nLowRank, nSameRank, nHighRank)
---getRankStat :: [Rank] -> [Rank] -> [Int]
---getRankStat ts [] = [0, 0, length ts]
---getRankStat [] gs = [0,0,0]
---getRankStat (t:ts) gs = zipWith (+) [n, 0, 0] (f (t:ts) ls)
---    where (n, ls) = takeWhile' (<t) gs
---          f _ [] = [0,0,0]
---          f [] _ = [0,0,0]
---          f (t:ts) (g:gs)
---            | t < g     = zipWith (+) [0,0,0] (getRankStat ts (g:gs))
---            | t > g     = zipWith (+) [0,0,0] (getRankStat (t:ts) gs)
---            | otherwise = zipWith (+) [0,1,0] (getRankStat ts gs)
-
-
----- (nSameSuit, nCorrect)
---getSuitAndCorrect :: [Card] -> [Card] -> [Int]
---getSuitAndCorrect [] [] = [0, 0]
---getSuitAndCorrect ts [] = [0, 0]
---getSuitAndCorrect [] gs = [0, 0]
---getSuitAndCorrect (t:ts) (g:gs)
---  | t < g     = zipWith (+) [if isSameSuit then 1 else 0, 0] (getSuitAndCorrect ts (g:gs))
---  | t > g     = zipWith (+) [if isSameSuit then 1 else 0, 0] (getSuitAndCorrect (t:ts) gs)
---  | t == g    = zipWith (+) [1,1] (getSuitAndCorrect ts gs)
---  where isSameSuit = getSuit t == getSuit g
-
-
 -- |Get a 5-tuple representing the feedback of a guess, which contains
 --  (correct, lower rank, same rank, higher rank, same suit) as ints
 feedback :: [Card] -> [Card] -> (Int,Int,Int,Int,Int)
 feedback ts gs
     | (length ts) /= (length gs) = error "number of cards in guess and answer does not match"
-    | otherwise                  = (numCorrect ts gs,
-                                    numLowerRank ts (getMinRank gs),
-                                    numSameRank ts gs,
-                                    numHigherRank ts (getMaxRank gs),
-                                    numSameSuit ts gs)
-
----- assume gs sorted
---feedback :: [Card] -> [Card] -> (Int,Int,Int,Int,Int)
---feedback ts gs
---    | (length ts) /= (length gs) = error "number of cards in guess and answer does not match"
---    | otherwise                  = (nc, nlr, nsr, nhr, nss)
---      where tsSorted = sort ts
---            tsRankSorted = sort $ map getRank ts
---            gsRankSorted = sort $ map getRank gs
---            nc:nss:xs = getSuitAndCorrect tsSorted gs
---            nlr:nsr:nhr:sx = getRankStat tsRankSorted gsRankSorted
+    | otherwise                  = feedbackSorted tsSorted gsSorted
+      where tsSorted = sort ts
+            gsSorted = sort gs
 
 
-
-
-
-
+feedbackSorted :: [Card] -> [Card] -> (Int,Int,Int,Int,Int)
+feedbackSorted ts gs = (numCorrect ts gs,
+                        numLowerRank tsRankSorted minR,
+                        numSameRank tsRankSorted gsRankSorted,
+                        numHigherRank tsRankSorted maxR,
+                        numSameSuit ts gs)
+  where minR = getRank $ head gs
+        maxR = getRank $ last gs
+        tsRankSorted = sortBy (comparing getRank) ts
+        gsRankSorted = sortBy (comparing getRank) gs
 
 
 
@@ -171,26 +131,6 @@ initialGuess x
         where allCombinations = map sort (chooseK allCards x)
               guess = getInitialGuess x
               others = delete guess allCombinations
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
