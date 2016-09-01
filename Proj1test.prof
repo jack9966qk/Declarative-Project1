@@ -1,249 +1,264 @@
-	Tue Aug 30 23:32 2016 Time and Allocation Profiling Report  (Final)
+	Thu Sep  1 19:25 2016 Time and Allocation Profiling Report  (Final)
 
 	   Proj1test +RTS -p -RTS
 
-	total time  =        7.48 secs   (7476 ticks @ 1000 us, 1 processor)
-	total alloc = 11,408,603,632 bytes  (excludes profiling overheads)
+	total time  =        0.11 secs   (111 ticks @ 1000 us, 1 processor)
+	total alloc = 167,159,536 bytes  (excludes profiling overheads)
 
-COST CENTRE          MODULE  %time %alloc
+COST CENTRE                  MODULE  %time %alloc
 
-numEqElem            Proj1    37.9   65.4
-countEq              Proj1    14.4    7.5
-binFeedbacks.grouped Proj1    11.1   14.2
-feedback             Proj1     8.3    0.7
-getRank              Proj1     4.4    0.0
-compare              Card      2.7    0.0
-compare              Card      2.6    0.0
-getMinRank           Proj1     2.3    5.1
-getSuit              Proj1     2.3    0.0
-getMaxRank           Proj1     2.1    4.6
-compare              Card      1.6    0.0
-numSameRank          Proj1     1.6    0.0
-numSameSuit          Proj1     1.2    0.0
-compare.suitorder    Card      1.2    0.0
-numLowerRank         Proj1     1.1    0.5
-numHigherRank        Proj1     1.0    0.4
+countEq                      Proj1    22.5    8.0
+binFeedbacks.grouped         Proj1    18.9   18.9
+feedbackOfSorted.tsRanks     Proj1    10.8   21.6
+feedbackOfSorted.gsRanks     Proj1     7.2   21.4
+compare                      Card      6.3    0.0
+countSameSuit                Proj1     4.5    0.0
+feedbackOfSorted             Proj1     3.6    9.3
+getRank                      Proj1     3.6    0.0
+countEq.combine              Proj1     3.6    1.5
+compare                      Card      3.6    0.0
+getRankInfo                  Proj1     2.7    5.0
+initialGuess.allCombinations Proj1     1.8    7.3
+getRankInfo.(...)            Proj1     1.8    0.8
+countCorrect.(...)           Proj1     1.8    0.0
+chooseK                      Proj1     0.0    3.1
 
 
-                                                                            individual      inherited
-COST CENTRE                        MODULE                no.     entries  %time %alloc   %time %alloc
+                                                                              individual      inherited
+COST CENTRE                          MODULE                no.     entries  %time %alloc   %time %alloc
 
-MAIN                               MAIN                  109          0    0.0    0.0   100.0  100.0
- main                              Main                  225          0    0.0    0.0    99.7   99.2
-  loop                             Main                  226          3    0.0    0.0    99.7   99.2
-   qualityFraction                 Main                  422          1    0.0    0.0     0.0    0.0
-    qualityFraction.perfect        Main                  424          1    0.0    0.0     0.0    0.0
-     goldStandard                  Main                  425          1    0.0    0.0     0.0    0.0
-    qualityFraction.guessesPerPlay Main                  423          1    0.0    0.0     0.0    0.0
-   loop.other'                     Main                  420          2    0.0    0.0     0.0    0.0
-   loop.(...)                      Main                  305          3    0.0    0.0    99.7   99.2
-    nextGuess                      Proj1                 307          3    0.0    0.0    99.7   99.2
-     nextGuess.nextPossible        Proj1                 309          3    0.0    0.0     4.9    5.0
-      satisfyFeedback              Proj1                 329     272110    0.2    0.4     4.8    5.0
-       feedback                    Proj1                 330     272110    0.4    0.0     4.6    4.6
-        numSameSuit                Proj1                 363      12671    0.0    0.0     0.2    0.2
-         numEqElem                 Proj1                 364      12671    0.1    0.1     0.1    0.2
-          countEq                  Proj1                 367      70380    0.0    0.0     0.0    0.0
-           compare                 Card                  369      57709    0.0    0.0     0.0    0.0
-           getSuit                 Proj1                 368     115418    0.0    0.0     0.0    0.0
-          compare                  Card                  366      76026    0.0    0.0     0.0    0.0
-          getSuit                  Proj1                 365     152052    0.0    0.0     0.0    0.0
-        getMaxRank                 Proj1                 360      25737    0.0    0.1     0.0    0.1
-         getRank                   Proj1                 362     102948    0.0    0.0     0.0    0.0
-         <=                        Card                  361      77211    0.0    0.0     0.0    0.0
-        numHigherRank              Proj1                 356      25737    0.0    0.0     0.0    0.0
-         numHigherRank.\           Proj1                 357     102948    0.0    0.0     0.0    0.0
-          >                        Card                  359     102948    0.0    0.0     0.0    0.0
-          getRank                  Proj1                 358     102948    0.0    0.0     0.0    0.0
-        numSameRank                Proj1                 349      53781    0.0    0.0     0.9    1.1
-         numEqElem                 Proj1                 350      53781    0.5    0.9     0.9    1.1
-          countEq                  Proj1                 353     361034    0.2    0.2     0.3    0.2
-           compare                 Card                  355     307253    0.0    0.0     0.0    0.0
-           getRank                 Proj1                 354     614506    0.1    0.0     0.1    0.0
-          compare                  Card                  352     441349    0.0    0.0     0.0    0.0
-          getRank                  Proj1                 351     882698    0.0    0.0     0.0    0.0
-        getMinRank                 Proj1                 346     195385    0.3    0.6     0.5    0.6
-         getRank                   Proj1                 348     781540    0.2    0.0     0.2    0.0
-         <=                        Card                  347     586155    0.0    0.0     0.0    0.0
-        numLowerRank               Proj1                 342     195385    0.1    0.1     0.2    0.1
-         numLowerRank.\            Proj1                 343     781540    0.1    0.0     0.1    0.0
-          <                        Card                  345     781540    0.0    0.0     0.0    0.0
-          getRank                  Proj1                 344     781540    0.0    0.0     0.0    0.0
-        numCorrect                 Proj1                 331     272110    0.0    0.0     2.4    2.5
-         numEqElem                 Proj1                 332     272110    1.2    2.5     2.4    2.5
-          countEq                  Proj1                 337    2063097    0.4    0.0     0.9    0.0
-           compare                 Card                  338    1790987    0.3    0.0     0.4    0.0
-            compare                Card                  341     919384    0.0    0.0     0.0    0.0
-            compare.suitorder      Card                  339    1790987    0.0    0.0     0.2    0.0
-             compare               Card                  340    1790987    0.1    0.0     0.1    0.0
-          compare                  Card                  333    1632660    0.1    0.0     0.3    0.0
-           compare                 Card                  336     329004    0.0    0.0     0.0    0.0
-           compare.suitorder       Card                  334    1632660    0.1    0.0     0.2    0.0
-            compare                Card                  335    1632660    0.1    0.0     0.1    0.0
-     nextGuess.nextPick            Proj1                 308          3    0.0    0.0    94.9   94.2
-      chooseGuess                  Proj1                 372          3    0.0    0.0     0.0    0.0
-       chooseGuess.compFunc        Proj1                 419       1388    0.0    0.0     0.0    0.0
-      computeNumAnswers            Proj1                 371          3    0.4    0.4    94.9   94.2
-       getNumPossibleAnswer        Proj1                 376       1391    0.0    0.0    94.3   93.8
-        magicFormula               Proj1                 418       1391    0.0    0.0     0.0    0.0
-        binFeedbacks               Proj1                 377       1391    0.1    0.0    94.3   93.8
-         binFeedbacks.grouped      Proj1                 378       1391   11.1   14.2    94.2   93.8
-          feedback                 Proj1                 379    1473230    7.9    0.6    83.1   79.6
-           numSameSuit             Proj1                 411    1472855    1.2    0.0    20.0   17.9
-            numEqElem              Proj1                 412    1472855   10.9   16.2    18.8   17.9
-             countEq               Proj1                 415    7364275    4.5    1.7     5.8    1.7
-              compare              Card                  417    5891420    0.4    0.0     0.4    0.0
-              getSuit              Proj1                 416   11782840    1.0    0.0     1.0    0.0
-             compare               Card                  414    8837130    0.7    0.0     0.7    0.0
-             getSuit               Proj1                 413   17674260    1.3    0.0     1.3    0.0
-           getMaxRank              Proj1                 408    1473220    2.1    4.5     3.0    4.5
-            getRank                Proj1                 410    5892880    0.7    0.0     0.7    0.0
-            <=                     Card                  409    4419660    0.3    0.0     0.3    0.0
-           numHigherRank           Proj1                 404    1473220    1.0    0.4     2.1    0.4
-            numHigherRank.\        Proj1                 405    5892880    0.5    0.0     1.1    0.0
-             >                     Card                  407    5892880    0.4    0.0     0.4    0.0
-             getRank               Proj1                 406    5892880    0.2    0.0     0.2    0.0
-           numSameRank             Proj1                 397    1473228    1.6    0.0    31.4   37.5
-            numEqElem              Proj1                 398    1473228   19.1   31.8    29.9   37.5
-             countEq               Proj1                 401    9538268    6.5    5.7     7.7    5.7
-              compare              Card                  403    8065040    0.7    0.0     0.7    0.0
-              getRank              Proj1                 402   16130080    0.5    0.0     0.5    0.0
-             compare               Card                  400   15938376    1.5    0.0     1.5    0.0
-             getRank               Proj1                 399   31876752    1.7    0.0     1.7    0.0
-           getMinRank              Proj1                 394    1473228    2.0    4.5     3.3    4.5
-            getRank                Proj1                 396    5892912    1.0    0.0     1.0    0.0
-            <=                     Card                  395    4419684    0.3    0.0     0.3    0.0
-           numLowerRank            Proj1                 390    1473228    1.0    0.4     2.3    0.4
-            numLowerRank.\         Proj1                 391    5892912    0.6    0.0     1.3    0.0
-             <                     Card                  393    5892912    0.6    0.0     0.6    0.0
-             getRank               Proj1                 392    5892912    0.1    0.0     0.1    0.0
-           numCorrect              Proj1                 380    1473230    0.1    0.0    13.0   13.7
-            numEqElem              Proj1                 381    1473230    6.2   13.7    12.9   13.7
-             countEq               Proj1                 385   11266180    2.7    0.0     4.9    0.0
-              compare              Card                  386    9792950    0.7    0.0     2.1    0.0
-               compare             Card                  389    5892920    0.3    0.0     0.3    0.0
-               compare.suitorder   Card                  387    9792950    0.5    0.0     1.2    0.0
-                compare            Card                  388    9792950    0.7    0.0     0.7    0.0
-             compare               Card                  382    8839380    0.6    0.0     1.8    0.0
-              compare.suitorder    Card                  383    8839380    0.6    0.0     1.2    0.0
-               compare             Card                  384    8839380    0.7    0.0     0.7    0.0
-       ==                          Card                  373     841028    0.1    0.0     0.2    0.0
-        ==                         Card                  375     841028    0.1    0.0     0.1    0.0
-        ==                         Card                  374     841028    0.0    0.0     0.0    0.0
-   loop.guess'                     Main                  304          3    0.0    0.0     0.0    0.0
-   successful                      Main                  303          4    0.0    0.0     0.0    0.0
-   loop.result                     Main                  263          4    0.0    0.0     0.0    0.0
-    feedback                       Proj1                 264          4    0.0    0.0     0.0    0.0
-     numSameSuit                   Proj1                 296          4    0.0    0.0     0.0    0.0
-      numEqElem                    Proj1                 297          4    0.0    0.0     0.0    0.0
-       countEq                     Proj1                 300         20    0.0    0.0     0.0    0.0
-        compare                    Card                  302         16    0.0    0.0     0.0    0.0
-        getSuit                    Proj1                 301         32    0.0    0.0     0.0    0.0
-       compare                     Card                  299         32    0.0    0.0     0.0    0.0
-       getSuit                     Proj1                 298         64    0.0    0.0     0.0    0.0
-     getMaxRank                    Proj1                 293          4    0.0    0.0     0.0    0.0
-      getRank                      Proj1                 295         16    0.0    0.0     0.0    0.0
-      <=                           Card                  294         12    0.0    0.0     0.0    0.0
-     numHigherRank                 Proj1                 289          4    0.0    0.0     0.0    0.0
-      numHigherRank.\              Proj1                 290         16    0.0    0.0     0.0    0.0
-       >                           Card                  292         16    0.0    0.0     0.0    0.0
-       getRank                     Proj1                 291         16    0.0    0.0     0.0    0.0
-     numSameRank                   Proj1                 282          4    0.0    0.0     0.0    0.0
-      numEqElem                    Proj1                 283          4    0.0    0.0     0.0    0.0
-       countEq                     Proj1                 286         24    0.0    0.0     0.0    0.0
-        compare                    Card                  288         20    0.0    0.0     0.0    0.0
-        getRank                    Proj1                 287         40    0.0    0.0     0.0    0.0
-       compare                     Card                  285         41    0.0    0.0     0.0    0.0
-       getRank                     Proj1                 284         82    0.0    0.0     0.0    0.0
-     getMinRank                    Proj1                 279          4    0.0    0.0     0.0    0.0
-      getRank                      Proj1                 281         16    0.0    0.0     0.0    0.0
-      <=                           Card                  280         12    0.0    0.0     0.0    0.0
-     numLowerRank                  Proj1                 275          4    0.0    0.0     0.0    0.0
-      numLowerRank.\               Proj1                 276         16    0.0    0.0     0.0    0.0
-       <                           Card                  278         16    0.0    0.0     0.0    0.0
-       getRank                     Proj1                 277         16    0.0    0.0     0.0    0.0
-     numCorrect                    Proj1                 265          4    0.0    0.0     0.0    0.0
-      numEqElem                    Proj1                 266          4    0.0    0.0     0.0    0.0
-       countEq                     Proj1                 270         28    0.0    0.0     0.0    0.0
-        compare                    Card                  271         24    0.0    0.0     0.0    0.0
-         compare                   Card                  274         16    0.0    0.0     0.0    0.0
-         compare.suitorder         Card                  272         24    0.0    0.0     0.0    0.0
-          compare                  Card                  273         24    0.0    0.0     0.0    0.0
-       compare                     Card                  267         32    0.0    0.0     0.0    0.0
-        compare.suitorder          Card                  268         32    0.0    0.0     0.0    0.0
-         compare                   Card                  269         32    0.0    0.0     0.0    0.0
-   validSelection                  Main                  259          4    0.0    0.0     0.0    0.0
-    ==                             Card                  260         40    0.0    0.0     0.0    0.0
-     ==                            Card                  262         16    0.0    0.0     0.0    0.0
-     ==                            Card                  261         40    0.0    0.0     0.0    0.0
-   show                            Card                  232         16    0.0    0.0     0.0    0.0
-    show                           Card                  245         16    0.0    0.0     0.0    0.0
-     fromEnum                      Card                  246         16    0.0    0.0     0.0    0.0
-    show                           Card                  233         16    0.0    0.0     0.0    0.0
-     fromEnum                      Card                  234         16    0.0    0.0     0.0    0.0
- CAF                               Main                  217          0    0.0    0.0     0.3    0.8
-  zeroPoint                        Main                  426          1    0.0    0.0     0.0    0.0
-  loop                             Main                  421          0    0.0    0.0     0.0    0.0
-  main                             Main                  218          1    0.0    0.0     0.3    0.8
-   main.other                      Main                  306          1    0.0    0.0     0.0    0.0
-   main.(...)                      Main                  228          1    0.0    0.0     0.3    0.8
-    initialGuess                   Proj1                 229          1    0.0    0.0     0.3    0.8
-     initialGuess.others           Proj1                 319          1    0.0    0.0     0.0    0.0
-      ==                           Card                  322      46960    0.0    0.0     0.0    0.0
-       ==                          Card                  326      36222    0.0    0.0     0.0    0.0
-       ==                          Card                  323      46960    0.0    0.0     0.0    0.0
-     initialGuess.allCombinations  Proj1                 310          1    0.0    0.0     0.3    0.8
-      chooseK                      Proj1                 311      41649    0.3    0.8     0.3    0.8
-       chooseK.first               Proj1                 320      20824    0.0    0.0     0.0    0.0
-       chooseK.others              Proj1                 318      20824    0.0    0.0     0.0    0.0
-     initialGuess.guess            Proj1                 230          1    0.0    0.0     0.0    0.0
-      getInitialGuess              Proj1                 231          1    0.0    0.0     0.0    0.0
-       getInitialGuess.suits       Proj1                 247          1    0.0    0.0     0.0    0.0
-        getInitialGuess.f          Proj1                 253          1    0.0    0.0     0.0    0.0
-        everyNth                   Proj1                 248          1    0.0    0.0     0.0    0.0
-         everyNthRec               Proj1                 254          5    0.0    0.0     0.0    0.0
-       getInitialGuess.ranks       Proj1                 235          1    0.0    0.0     0.0    0.0
-        getInitialGuess.f          Proj1                 241          1    0.0    0.0     0.0    0.0
-        everyNth                   Proj1                 236          1    0.0    0.0     0.0    0.0
-         everyNthRec               Proj1                 242          7    0.0    0.0     0.0    0.0
-   main.guess                      Main                  227          1    0.0    0.0     0.0    0.0
-   loop                            Main                  224          1    0.0    0.0     0.0    0.0
-   main.answer                     Main                  220          1    0.0    0.0     0.0    0.0
-   validSelection                  Main                  219          1    0.0    0.0     0.0    0.0
-    ==                             Card                  221         10    0.0    0.0     0.0    0.0
-     ==                            Card                  223          4    0.0    0.0     0.0    0.0
-     ==                            Card                  222         10    0.0    0.0     0.0    0.0
- CAF                               Card                  216          0    0.0    0.0     0.0    0.0
-  maxBound                         Card                  314          1    0.0    0.0     0.0    0.0
-  minBound                         Card                  313          1    0.0    0.0     0.0    0.0
-  suitchars                        Card                  258          1    0.0    0.0     0.0    0.0
-  show                             Card                  256          0    0.0    0.0     0.0    0.0
-   show                            Card                  257          0    0.0    0.0     0.0    0.0
-  maxBound                         Card                  252          1    0.0    0.0     0.0    0.0
-  minBound                         Card                  251          1    0.0    0.0     0.0    0.0
-  rankchars                        Card                  244          1    0.0    0.0     0.0    0.0
-  maxBound                         Card                  240          1    0.0    0.0     0.0    0.0
-  minBound                         Card                  239          1    0.0    0.0     0.0    0.0
- CAF                               Proj1                 215          0    0.0    0.0     0.0    0.0
-  threshold                        Proj1                 370          1    0.0    0.0     0.0    0.0
-  allCards                         Proj1                 312          1    0.0    0.0     0.0    0.0
-   toEnum                          Card                  321         52    0.0    0.0     0.0    0.0
-    toEnum.r                       Card                  327         52    0.0    0.0     0.0    0.0
-     toEnum                        Card                  328         52    0.0    0.0     0.0    0.0
-    toEnum.s                       Card                  324         52    0.0    0.0     0.0    0.0
-     toEnum                        Card                  325         52    0.0    0.0     0.0    0.0
-   fromEnum                        Card                  315          2    0.0    0.0     0.0    0.0
-    fromEnum                       Card                  317          2    0.0    0.0     0.0    0.0
-    fromEnum                       Card                  316          2    0.0    0.0     0.0    0.0
-  allSuits                         Proj1                 249          1    0.0    0.0     0.0    0.0
-   toEnum                          Card                  255          4    0.0    0.0     0.0    0.0
-   fromEnum                        Card                  250          2    0.0    0.0     0.0    0.0
-  allRanks                         Proj1                 237          1    0.0    0.0     0.0    0.0
-   toEnum                          Card                  243          4    0.0    0.0     0.0    0.0
-   fromEnum                        Card                  238          2    0.0    0.0     0.0    0.0
- CAF                               GHC.Conc.Signal       195          0    0.0    0.0     0.0    0.0
- CAF                               GHC.Float             188          0    0.0    0.0     0.0    0.0
- CAF                               GHC.IO.Encoding       178          0    0.0    0.0     0.0    0.0
- CAF                               GHC.IO.Encoding.Iconv 176          0    0.0    0.0     0.0    0.0
- CAF                               GHC.IO.Handle.FD      167          0    0.0    0.0     0.0    0.0
- CAF                               GHC.IO.Handle.Text    165          0    0.0    0.0     0.0    0.0
+MAIN                                 MAIN                  109          0    0.0    0.0   100.0  100.0
+ main                                Main                  225          0    0.0    0.0    96.4   89.4
+  loop                               Main                  226          3    0.0    0.0    96.4   89.4
+   qualityFraction                   Main                  438          1    0.0    0.0     0.0    0.0
+    qualityFraction.perfect          Main                  440          1    0.0    0.0     0.0    0.0
+     goldStandard                    Main                  441          1    0.0    0.0     0.0    0.0
+    qualityFraction.guessesPerPlay   Main                  439          1    0.0    0.0     0.0    0.0
+   loop.other'                       Main                  436          2    0.0    0.0     0.0    0.0
+   loop.(...)                        Main                  312          3    0.0    0.0    96.4   89.4
+    nextGuess                        Proj1                 314          3    0.0    0.0    96.4   89.4
+     nextGuess.nextPossible          Proj1                 316          3    0.0    0.0     9.9    7.3
+      satisfyFeedback                Proj1                 340      22302    0.0    0.0     9.9    7.3
+       feedbackOfSorted              Proj1                 341      22302    0.0    3.0     9.9    7.3
+        countSameSuit                Proj1                 376        358    0.0    0.0     0.0    0.0
+         countSameSuit.a             Proj1                 382        358    0.0    0.0     0.0    0.0
+         countSameSuit.(...)         Proj1                 377        358    0.0    0.0     0.0    0.0
+          countEq                    Proj1                 378       1528    0.0    0.0     0.0    0.0
+           countEq.combine           Proj1                 381        632    0.0    0.0     0.0    0.0
+           compare                   Card                  380       1170    0.0    0.0     0.0    0.0
+           getSuit                   Proj1                 379       2340    0.0    0.0     0.0    0.0
+        feedbackOfSorted.nhr         Proj1                 373        713    0.0    0.0     0.0    0.0
+        feedbackOfSorted.nsr         Proj1                 366       2573    0.0    0.0     0.0    0.0
+        feedbackOfSorted.gsRanks     Proj1                 363       3641    0.0    1.6     0.0    1.6
+         getRank                     Proj1                 365      10923    0.0    0.0     0.0    0.0
+         compare                     Card                  364       7507    0.0    0.0     0.0    0.0
+        feedbackOfSorted.tsRanks     Proj1                 358       3641    0.0    1.8     0.0    1.8
+         getRank                     Proj1                 360      10923    0.0    0.0     0.0    0.0
+         compare                     Card                  359      10874    0.0    0.0     0.0    0.0
+        feedbackOfSorted.(...)       Proj1                 352       3641    0.0    0.0     1.8    0.8
+         getRankInfo                 Proj1                 353       3641    0.0    0.4     1.8    0.8
+          getRankInfo.nhr            Proj1                 375        713    0.0    0.0     0.0    0.0
+          getRankInfo.tsHigher       Proj1                 374        713    0.0    0.0     0.0    0.0
+          getRankInfo.(...)          Proj1                 369       2573    0.9    0.0     1.8    0.2
+           countEq                   Proj1                 370      11978    0.9    0.1     0.9    0.2
+            countEq.combine          Proj1                 372       3330    0.0    0.0     0.0    0.0
+            compare                  Card                  371       9405    0.0    0.0     0.0    0.0
+          getRankInfo.newts          Proj1                 368       2573    0.0    0.0     0.0    0.0
+          getRankInfo.nsr            Proj1                 367       2573    0.0    0.0     0.0    0.0
+          getRankInfo.minR           Proj1                 362       3641    0.0    0.0     0.0    0.0
+          getRankInfo.(...)          Proj1                 355       3641    0.0    0.0     0.0    0.1
+           dropWhileAndCount         Proj1                 356       3641    0.0    0.1     0.0    0.1
+            dropWhileAndCount.fun    Proj1                 357       4793    0.0    0.0     0.0    0.0
+             <                       Card                  361       4793    0.0    0.0     0.0    0.0
+          getRankInfo.nlr            Proj1                 354       3641    0.0    0.0     0.0    0.0
+        feedbackOfSorted.nlr         Proj1                 351       3641    0.0    0.0     0.0    0.0
+        countCorrect                 Proj1                 342      22302    0.9    0.0     8.1    0.2
+         countCorrect.a              Proj1                 350      22302    0.0    0.0     0.0    0.0
+         countCorrect.(...)          Proj1                 343      22302    0.0    0.0     7.2    0.2
+          countEq                    Proj1                 344     123454    1.8    0.1     7.2    0.2
+           countEq.combine           Proj1                 349       3934    0.9    0.0     0.9    0.0
+           compare                   Card                  345     101152    0.9    0.0     4.5    0.0
+            compare                  Card                  348      45687    0.0    0.0     0.0    0.0
+            compare.suitorder        Card                  346     101152    0.0    0.0     3.6    0.0
+             compare                 Card                  347     101152    3.6    0.0     3.6    0.0
+     nextGuess.nextPick              Proj1                 315          3    0.0    0.0    86.5   82.0
+      chooseGuess                    Proj1                 385          3    0.0    0.0     0.0    0.0
+       chooseGuess.compFunc          Proj1                 435        201    0.0    0.0     0.0    0.0
+      computeNumAnswers              Proj1                 384          3    0.9    0.8    86.5   82.0
+       getNumPossibleAnswer          Proj1                 388        203    0.0    0.0    85.6   81.2
+        magicFormula                 Proj1                 434        203    0.0    0.0     0.0    0.0
+        binFeedbacks                 Proj1                 389        203    0.0    0.3    85.6   81.2
+         binFeedbacks.grouped        Proj1                 390        203   18.9   18.9    85.6   80.9
+          feedbackOfSorted           Proj1                 391      39806    3.6    6.3    66.7   62.0
+           countSameSuit             Proj1                 425      39768    4.5    0.0    16.2    5.4
+            countSameSuit.a          Proj1                 431      39768    0.0    0.0     0.0    0.0
+            countSameSuit.(...)      Proj1                 426      39768    0.0    0.0    11.7    5.4
+             countEq                 Proj1                 427     177130    9.0    4.8    11.7    5.4
+              countEq.combine        Proj1                 430      64612    0.9    0.6     0.9    0.6
+              compare                Card                  429     137362    0.9    0.0     0.9    0.0
+              getSuit                Proj1                 428     274724    0.9    0.0     0.9    0.0
+           feedbackOfSorted.nhr      Proj1                 422      39770    0.0    0.0     0.0    0.0
+           feedbackOfSorted.nsr      Proj1                 415      39798    0.0    0.0     0.0    0.0
+           feedbackOfSorted.gsRanks  Proj1                 412      39802    7.2   19.8     8.1   19.8
+            getRank                  Proj1                 414     119406    0.9    0.0     0.9    0.0
+            compare                  Card                  413     122590    0.0    0.0     0.0    0.0
+           feedbackOfSorted.tsRanks  Proj1                 407      39802   10.8   19.8    13.5   19.8
+            getRank                  Proj1                 409     119406    2.7    0.0     2.7    0.0
+            compare                  Card                  408     122590    0.0    0.0     0.0    0.0
+           feedbackOfSorted.(...)    Proj1                 401      39802    0.0    0.0    11.7    9.8
+            getRankInfo              Proj1                 402      39802    2.7    4.6    11.7    9.8
+             getRankInfo.nhr         Proj1                 424      39770    0.9    0.4     0.9    0.4
+             getRankInfo.tsHigher    Proj1                 423      39770    0.0    0.0     0.0    0.0
+             getRankInfo.(...)       Proj1                 418      39798    0.9    0.8     5.4    3.5
+              countEq                Proj1                 419     176757    4.5    2.2     4.5    2.8
+               countEq.combine       Proj1                 421      60340    0.0    0.6     0.0    0.6
+               compare               Card                  420     136959    0.0    0.0     0.0    0.0
+             getRankInfo.newts       Proj1                 417      39798    0.0    0.0     0.0    0.0
+             getRankInfo.nsr         Proj1                 416      39798    0.0    0.0     0.0    0.0
+             getRankInfo.minR        Proj1                 411      39802    0.0    0.0     0.0    0.0
+             getRankInfo.(...)       Proj1                 404      39802    0.0    0.4     1.8    1.3
+              dropWhileAndCount      Proj1                 405      39802    0.9    0.9     1.8    1.0
+               dropWhileAndCount.fun Proj1                 406      53143    0.0    0.1     0.9    0.1
+                <                    Card                  410      53143    0.9    0.0     0.9    0.0
+             getRankInfo.nlr         Proj1                 403      39802    0.9    0.0     0.9    0.0
+           feedbackOfSorted.nlr      Proj1                 400      39802    0.0    0.0     0.0    0.0
+           countCorrect              Proj1                 392      39806    0.0    0.0    13.5    0.9
+            countCorrect.a           Proj1                 399      39806    0.0    0.0     0.0    0.0
+            countCorrect.(...)       Proj1                 393      39806    1.8    0.0    13.5    0.9
+             countEq                 Proj1                 394     208288    6.3    0.7    11.7    0.9
+              countEq.combine        Proj1                 432      20800    1.8    0.2     1.8    0.2
+              compare                Card                  395     168482    1.8    0.0     3.6    0.0
+               compare               Card                  398      78762    0.0    0.0     0.0    0.0
+               compare.suitorder     Card                  396     168482    0.9    0.0     1.8    0.0
+                compare              Card                  397     168482    0.9    0.0     0.9    0.0
+       ==                            Card                  386      24180    0.0    0.0     0.0    0.0
+        ==                           Card                  433      13141    0.0    0.0     0.0    0.0
+        ==                           Card                  387      24180    0.0    0.0     0.0    0.0
+   loop.guess'                       Main                  311          3    0.0    0.0     0.0    0.0
+   successful                        Main                  310          4    0.0    0.0     0.0    0.0
+   loop.result                       Main                  263          4    0.0    0.0     0.0    0.0
+    feedback                         Proj1                 264          4    0.0    0.0     0.0    0.0
+     compare                         Card                  269         16    0.0    0.0     0.0    0.0
+      compare.suitorder              Card                  270         16    0.0    0.0     0.0    0.0
+       compare                       Card                  271         16    0.0    0.0     0.0    0.0
+     feedbackOfSorted                Proj1                 265          4    0.0    0.0     0.0    0.0
+      countSameSuit                  Proj1                 303          4    0.0    0.0     0.0    0.0
+       countSameSuit.a               Proj1                 309          4    0.0    0.0     0.0    0.0
+       countSameSuit.(...)           Proj1                 304          4    0.0    0.0     0.0    0.0
+        countEq                      Proj1                 305         16    0.0    0.0     0.0    0.0
+         countEq.combine             Proj1                 308         11    0.0    0.0     0.0    0.0
+         compare                     Card                  307         12    0.0    0.0     0.0    0.0
+         getSuit                     Proj1                 306         24    0.0    0.0     0.0    0.0
+      feedbackOfSorted.nhr           Proj1                 300          4    0.0    0.0     0.0    0.0
+      feedbackOfSorted.nsr           Proj1                 293          4    0.0    0.0     0.0    0.0
+      feedbackOfSorted.gsRanks       Proj1                 290          4    0.0    0.0     0.0    0.0
+       getRank                       Proj1                 292         12    0.0    0.0     0.0    0.0
+       compare                       Card                  291         13    0.0    0.0     0.0    0.0
+      feedbackOfSorted.tsRanks       Proj1                 285          4    0.0    0.0     0.0    0.0
+       getRank                       Proj1                 287         12    0.0    0.0     0.0    0.0
+       compare                       Card                  286         16    0.0    0.0     0.0    0.0
+      feedbackOfSorted.(...)         Proj1                 279          4    0.0    0.0     0.0    0.0
+       getRankInfo                   Proj1                 280          4    0.0    0.0     0.0    0.0
+        getRankInfo.nhr              Proj1                 302          4    0.0    0.0     0.0    0.0
+        getRankInfo.tsHigher         Proj1                 301          4    0.0    0.0     0.0    0.0
+        getRankInfo.(...)            Proj1                 296          4    0.0    0.0     0.0    0.0
+         countEq                     Proj1                 297         19    0.0    0.0     0.0    0.0
+          countEq.combine            Proj1                 299          8    0.0    0.0     0.0    0.0
+          compare                    Card                  298         15    0.0    0.0     0.0    0.0
+        getRankInfo.newts            Proj1                 295          4    0.0    0.0     0.0    0.0
+        getRankInfo.nsr              Proj1                 294          4    0.0    0.0     0.0    0.0
+        getRankInfo.minR             Proj1                 289          4    0.0    0.0     0.0    0.0
+        getRankInfo.(...)            Proj1                 282          4    0.0    0.0     0.0    0.0
+         dropWhileAndCount           Proj1                 283          4    0.0    0.0     0.0    0.0
+          dropWhileAndCount.fun      Proj1                 284          4    0.0    0.0     0.0    0.0
+           <                         Card                  288          4    0.0    0.0     0.0    0.0
+        getRankInfo.nlr              Proj1                 281          4    0.0    0.0     0.0    0.0
+      feedbackOfSorted.nlr           Proj1                 278          4    0.0    0.0     0.0    0.0
+      countCorrect                   Proj1                 266          4    0.0    0.0     0.0    0.0
+       countCorrect.a                Proj1                 277          4    0.0    0.0     0.0    0.0
+       countCorrect.(...)            Proj1                 267          4    0.0    0.0     0.0    0.0
+        countEq                      Proj1                 268         19    0.0    0.0     0.0    0.0
+         countEq.combine             Proj1                 276          6    0.0    0.0     0.0    0.0
+         compare                     Card                  272         15    0.0    0.0     0.0    0.0
+          compare                    Card                  275         11    0.0    0.0     0.0    0.0
+          compare.suitorder          Card                  273         15    0.0    0.0     0.0    0.0
+           compare                   Card                  274         15    0.0    0.0     0.0    0.0
+   validSelection                    Main                  259          4    0.0    0.0     0.0    0.0
+    ==                               Card                  260         24    0.0    0.0     0.0    0.0
+     ==                              Card                  262         12    0.0    0.0     0.0    0.0
+     ==                              Card                  261         24    0.0    0.0     0.0    0.0
+   show                              Card                  232         12    0.0    0.0     0.0    0.0
+    show                             Card                  245         12    0.0    0.0     0.0    0.0
+     fromEnum                        Card                  246         12    0.0    0.0     0.0    0.0
+    show                             Card                  233         12    0.0    0.0     0.0    0.0
+     fromEnum                        Card                  234         12    0.0    0.0     0.0    0.0
+ CAF                                 Main                  217          0    0.0    0.0     3.6   10.5
+  zeroPoint                          Main                  442          1    0.0    0.0     0.0    0.0
+  loop                               Main                  437          0    0.0    0.0     0.0    0.0
+  main                               Main                  218          1    0.0    0.0     3.6   10.5
+   main.other                        Main                  313          1    0.0    0.0     0.0    0.0
+   main.(...)                        Main                  228          1    0.0    0.0     3.6   10.5
+    initialGuess                     Proj1                 229          1    0.0    0.0     3.6   10.5
+     initialGuess.others             Proj1                 326          1    0.0    0.1     0.0    0.1
+      ==                             Card                  337       3778    0.0    0.0     0.0    0.0
+       ==                            Card                  339       3336    0.0    0.0     0.0    0.0
+       ==                            Card                  338       3778    0.0    0.0     0.0    0.0
+     initialGuess.allCombinations    Proj1                 317          1    1.8    7.3     3.6   10.4
+      compare                        Card                  329      44200    0.9    0.0     1.8    0.0
+       compare                       Card                  334      14456    0.0    0.0     0.0    0.0
+       compare.suitorder             Card                  330      44200    0.0    0.0     0.9    0.0
+        compare                      Card                  331      44200    0.9    0.0     0.9    0.0
+      chooseK                        Proj1                 318       2549    0.0    3.1     0.0    3.1
+       chooseK.first                 Proj1                 327       1274    0.0    0.0     0.0    0.0
+       chooseK.others                Proj1                 325       1274    0.0    0.0     0.0    0.0
+     initialGuess.guess              Proj1                 230          1    0.0    0.0     0.0    0.0
+      getInitialGuess                Proj1                 231          1    0.0    0.0     0.0    0.0
+       getInitialGuess.suits         Proj1                 247          1    0.0    0.0     0.0    0.0
+        getInitialGuess.f            Proj1                 253          1    0.0    0.0     0.0    0.0
+        everyNth                     Proj1                 248          1    0.0    0.0     0.0    0.0
+         everyNthRec                 Proj1                 254          5    0.0    0.0     0.0    0.0
+       getInitialGuess.ranks         Proj1                 235          1    0.0    0.0     0.0    0.0
+        getInitialGuess.f            Proj1                 241          1    0.0    0.0     0.0    0.0
+        everyNth                     Proj1                 236          1    0.0    0.0     0.0    0.0
+         everyNthRec                 Proj1                 242          5    0.0    0.0     0.0    0.0
+   main.guess                        Main                  227          1    0.0    0.0     0.0    0.0
+   loop                              Main                  224          1    0.0    0.0     0.0    0.0
+   main.answer                       Main                  220          1    0.0    0.0     0.0    0.0
+   validSelection                    Main                  219          1    0.0    0.0     0.0    0.0
+    ==                               Card                  221          6    0.0    0.0     0.0    0.0
+     ==                              Card                  223          3    0.0    0.0     0.0    0.0
+     ==                              Card                  222          6    0.0    0.0     0.0    0.0
+ CAF                                 Card                  216          0    0.0    0.0     0.0    0.0
+  maxBound                           Card                  321          1    0.0    0.0     0.0    0.0
+  minBound                           Card                  320          1    0.0    0.0     0.0    0.0
+  suitchars                          Card                  258          1    0.0    0.0     0.0    0.0
+  show                               Card                  256          0    0.0    0.0     0.0    0.0
+   show                              Card                  257          0    0.0    0.0     0.0    0.0
+  maxBound                           Card                  252          1    0.0    0.0     0.0    0.0
+  minBound                           Card                  251          1    0.0    0.0     0.0    0.0
+  rankchars                          Card                  244          1    0.0    0.0     0.0    0.0
+  maxBound                           Card                  240          1    0.0    0.0     0.0    0.0
+  minBound                           Card                  239          1    0.0    0.0     0.0    0.0
+ CAF                                 Proj1                 215          0    0.0    0.0     0.0    0.0
+  threshold                          Proj1                 383          1    0.0    0.0     0.0    0.0
+  allCards                           Proj1                 319          1    0.0    0.0     0.0    0.0
+   toEnum                            Card                  328         52    0.0    0.0     0.0    0.0
+    toEnum.r                         Card                  335         52    0.0    0.0     0.0    0.0
+     toEnum                          Card                  336         52    0.0    0.0     0.0    0.0
+    toEnum.s                         Card                  332         52    0.0    0.0     0.0    0.0
+     toEnum                          Card                  333         52    0.0    0.0     0.0    0.0
+   fromEnum                          Card                  322          2    0.0    0.0     0.0    0.0
+    fromEnum                         Card                  324          2    0.0    0.0     0.0    0.0
+    fromEnum                         Card                  323          2    0.0    0.0     0.0    0.0
+  allSuits                           Proj1                 249          1    0.0    0.0     0.0    0.0
+   toEnum                            Card                  255          3    0.0    0.0     0.0    0.0
+   fromEnum                          Card                  250          2    0.0    0.0     0.0    0.0
+  allRanks                           Proj1                 237          1    0.0    0.0     0.0    0.0
+   toEnum                            Card                  243          3    0.0    0.0     0.0    0.0
+   fromEnum                          Card                  238          2    0.0    0.0     0.0    0.0
+ CAF                                 GHC.Conc.Signal       195          0    0.0    0.0     0.0    0.0
+ CAF                                 GHC.Float             188          0    0.0    0.0     0.0    0.0
+ CAF                                 GHC.IO.Encoding       178          0    0.0    0.0     0.0    0.0
+ CAF                                 GHC.IO.Encoding.Iconv 176          0    0.0    0.0     0.0    0.0
+ CAF                                 GHC.IO.Handle.FD      167          0    0.0    0.0     0.0    0.0
+ CAF                                 GHC.IO.Handle.Text    165          0    0.0    0.0     0.0    0.0

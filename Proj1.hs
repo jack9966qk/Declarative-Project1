@@ -8,7 +8,7 @@ data GameState = GameState [[Card]]
     deriving (Show)
 
 threshold :: Int
-threshold = 1250
+threshold = 1000
 
 allCards :: [Card]
 allCards = [minBound .. maxBound]
@@ -79,23 +79,11 @@ numHigherRank cards max = length (filter (\c -> (getRank c) > max) cards)
 feedback :: [Card] -> [Card] -> (Int,Int,Int,Int,Int)
 feedback ts gs
     | (length ts) /= (length gs) = error "number of cards in guess and answer does not match"
-    | otherwise                  = feedbackSorted tsSorted gsSorted
-      where tsSorted = sort ts
-            gsSorted = sort gs
-
-
-feedbackSorted :: [Card] -> [Card] -> (Int,Int,Int,Int,Int)
-feedbackSorted ts gs = (numCorrect ts gs,
-                        numLowerRank tsRankSorted minR,
-                        numSameRank tsRankSorted gsRankSorted,
-                        numHigherRank tsRankSorted maxR,
-                        numSameSuit ts gs)
-  where minR = getRank $ head gs
-        maxR = getRank $ last gs
-        tsRankSorted = sortBy (comparing getRank) ts
-        gsRankSorted = sortBy (comparing getRank) gs
-
-
+    | otherwise                  = (numCorrect ts gs,
+                                    numLowerRank ts (getMinRank gs),
+                                    numSameRank ts gs,
+                                    numHigherRank ts (getMaxRank gs),
+                                    numSameSuit ts gs)
 
 
 chooseK :: (Eq a) => [a] -> Int -> [[a]]
@@ -131,6 +119,7 @@ initialGuess x
         where allCombinations = map sort (chooseK allCards x)
               guess = getInitialGuess x
               others = delete guess allCombinations
+
 
 
 

@@ -1,0 +1,5 @@
+feedback [Card Club R3, Card Heart R4] [Card Heart R4, Card Club R3]
+feedback [Card Club R3, Card Heart R4] [Card Club R3, Card Heart R3]
+feedback [Card Diamond R3, Card Heart R3] [Card Spade R3, Card Club R3]
+feedback [Card Club R3, Card Heart R4] [Card Heart R2, Card Heart R3]
+feedback [Card Club Ace, Card Club R2] [Card Club R3, Card Heart R4]
