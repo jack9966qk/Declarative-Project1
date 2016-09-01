@@ -2,13 +2,15 @@ module Proj1 (feedback, initialGuess, nextGuess, GameState) where
 
 import Data.List
 import Data.Ord
+import Data.Map.Strict
+import Data.Heap
 import Card
 
 data GameState = GameState [[Card]]
     deriving (Show)
 
 threshold :: Int
-threshold = 10000
+threshold = 100000
 
 allCards :: [Card]
 allCards = [minBound .. maxBound]
@@ -29,14 +31,9 @@ countEq compFunc (x:xs) (y:ys) = case compFunc x y of
     LT        -> countEq compFunc xs (y:ys)
     otherwise -> 1 + countEq compFunc xs ys
 
--- |Given count the number of element that are equal, without repitition
---  in two lists
-numEqElem :: (Eq t, Ord t) => (t -> t -> Ordering) -> [t] -> [t] -> Int
-numEqElem compFunc a b = countEq compFunc (sortBy compFunc a) (sortBy compFunc b)
-
 -- |Get the number of cards in the answer are also in the guess
 numCorrect :: [Card] -> [Card] -> Int
-numCorrect t g = numEqElem (compare) t g
+numCorrect t g = countEq (compare) t g
 
 
 -- |Given a list of cards, get the minimum rank of the cards
@@ -56,12 +53,12 @@ getSuit (Card suit _) = suit
 -- |Get number of cards in the answer have the same rank as
 --  a card in the guess
 numSameRank :: [Card] -> [Card] -> Int
-numSameRank t g = numEqElem (comparing getRank) t g
+numSameRank t g = countEq (comparing getRank) t g
 
 -- |Get number of cards in the answer have the same suit as
 --  a card in the guess
 numSameSuit :: [Card] -> [Card] -> Int
-numSameSuit t g = numEqElem (comparing getSuit) t g
+numSameSuit t g = countEq (comparing getSuit) t g
 
 -- |Get number of cards cards in the answer have rank
 --  lower than the lowest rank in the guess
@@ -73,65 +70,26 @@ numLowerRank cards min = length (filter (\c -> (getRank c) < min) cards)
 numHigherRank :: [Card] -> Rank -> Int
 numHigherRank cards max = length (filter (\c -> (getRank c) > max) cards)
 
-
---takeWhile' _ [] = (0, [])
---takeWhile' f (x:xs) = if f x
---  then (1+n, ls)
---  else (0, x:xs)
---  where (n, ls) = takeWhile' f xs
-
-
----- (nLowRank, nSameRank, nHighRank)
---getRankStat :: [Rank] -> [Rank] -> [Int]
---getRankStat ts [] = [0, 0, length ts]
---getRankStat [] gs = [0,0,0]
---getRankStat (t:ts) gs = zipWith (+) [n, 0, 0] (f (t:ts) ls)
---    where (n, ls) = takeWhile' (<t) gs
---          f _ [] = [0,0,0]
---          f [] _ = [0,0,0]
---          f (t:ts) (g:gs)
---            | t < g     = zipWith (+) [0,0,0] (getRankStat ts (g:gs))
---            | t > g     = zipWith (+) [0,0,0] (getRankStat (t:ts) gs)
---            | otherwise = zipWith (+) [0,1,0] (getRankStat ts gs)
-
-
----- (nSameSuit, nCorrect)
---getSuitAndCorrect :: [Card] -> [Card] -> [Int]
---getSuitAndCorrect [] [] = [0, 0]
---getSuitAndCorrect ts [] = [0, 0]
---getSuitAndCorrect [] gs = [0, 0]
---getSuitAndCorrect (t:ts) (g:gs)
---  | t < g     = zipWith (+) [if isSameSuit then 1 else 0, 0] (getSuitAndCorrect ts (g:gs))
---  | t > g     = zipWith (+) [if isSameSuit then 1 else 0, 0] (getSuitAndCorrect (t:ts) gs)
---  | t == g    = zipWith (+) [1,1] (getSuitAndCorrect ts gs)
---  where isSameSuit = getSuit t == getSuit g
-
-
 -- |Get a 5-tuple representing the feedback of a guess, which contains
 --  (correct, lower rank, same rank, higher rank, same suit) as ints
 feedback :: [Card] -> [Card] -> (Int,Int,Int,Int,Int)
 feedback ts gs
     | (length ts) /= (length gs) = error "number of cards in guess and answer does not match"
-    | otherwise                  = (numCorrect ts gs,
-                                    numLowerRank ts (getMinRank gs),
-                                    numSameRank ts gs,
-                                    numHigherRank ts (getMaxRank gs),
-                                    numSameSuit ts gs)
-
----- assume gs sorted
---feedback :: [Card] -> [Card] -> (Int,Int,Int,Int,Int)
---feedback ts gs
---    | (length ts) /= (length gs) = error "number of cards in guess and answer does not match"
---    | otherwise                  = (nc, nlr, nsr, nhr, nss)
---      where tsSorted = sort ts
---            tsRankSorted = sort $ map getRank ts
---            gsRankSorted = sort $ map getRank gs
---            nc:nss:xs = getSuitAndCorrect tsSorted gs
---            nlr:nsr:nhr:sx = getRankStat tsRankSorted gsRankSorted
+    | otherwise                  = feedbackSorted tsSorted gsSorted
+      where tsSorted = sort ts
+            gsSorted = sort gs
 
 
-
-
+feedbackSorted :: [Card] -> [Card] -> (Int,Int,Int,Int,Int)
+feedbackSorted ts gs = (numCorrect ts gs,
+                        numLowerRank tsRankSorted minR,
+                        numSameRank tsRankSorted gsRankSorted,
+                        numHigherRank tsRankSorted maxR,
+                        numSameSuit ts gs)
+  where minR = getRank $ head gs
+        maxR = getRank $ last gs
+        tsRankSorted = sortBy (comparing getRank) ts
+        gsRankSorted = sortBy (comparing getRank) gs
 
 
 
@@ -196,25 +154,36 @@ initialGuess x
 
 satisfyFeedback :: (Int,Int,Int,Int,Int) -> [Card] -> [Card] -> Bool
 satisfyFeedback lastFeedback lastGuess newGuess
-    = lastFeedback == (feedback newGuess lastGuess)
+    = lastFeedback == (feedbackSorted newGuess lastGuess)
 
 binFeedbacks :: [Card] -> [[Card]] -> [Int]
 binFeedbacks guess others = map length grouped
-    where grouped = (group . sort) [feedback answer guess | answer <- others]
+    where grouped = (group . sort) [feedbackSorted answer guess | answer <- others]
 
 magicFormula :: [Int] -> Int
 magicFormula bin = (sum (map (^2) bin)) `div` (sum bin)
 
-getNumPossibleAnswer :: [Card] -> [[Card]] -> Int
-getNumPossibleAnswer g gs = magicFormula (binFeedbacks g gs)
-
 computeNumAnswers :: [[Card]] -> [([Card], Int)]
 computeNumAnswers guesses
-    = [(x, getNumPossibleAnswer x (delete x guesses)) | x <- guesses]
+    = [(x, f x guesses) | x <- guesses]
+      where f x guesses = magicFormula (binFeedbacks x (delete x guesses))
 
 chooseGuess :: [([Card], Int)] -> [Card]
 chooseGuess guesses = (fst . (minimumBy compFunc)) guesses
     where compFunc x y = (snd x) `compare` (snd y)
+
+emptyHeap :: (HeapT Int [Card])
+emptyHeap = empty
+
+computeMagicNum :: [Card] -> [Cards] -> Int
+computeMagicNum guess answers
+  = 
+
+chooseGuess :: [[Card]] -> [Card]
+chooseGuess candidates = best
+  where Just best = viewHead foldl f empty candidates
+        f heap nextGuess = insert (split $ g nextGuess) heap
+        g nextGuess = computeMagicNum nextGuess (delete nextGuess candidates)
 
 nextGuess :: ([Card],GameState) -> (Int,Int,Int,Int,Int) -> ([Card],GameState)
 nextGuess (lastGuess, (GameState possible)) feedback
