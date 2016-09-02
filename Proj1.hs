@@ -8,7 +8,7 @@ data GameState = GameState [[Card]]
     deriving (Show)
 
 threshold :: Int
-threshold = 1000
+threshold = 1000000
 
 allCards :: [Card]
 allCards = [minBound .. maxBound]
@@ -19,33 +19,6 @@ allRanks = [minBound .. maxBound]
 allSuits :: [Suit]
 allSuits = [minBound .. maxBound]
 
--- |Given two lists sorted in ascending order, count the number of elements
---  that are equal, without repitition
-countEq :: (Eq t, Ord t) => (t -> t -> Ordering) -> [t] -> [t] -> Int
-countEq compFunc [] _ = 0
-countEq compFunc _ [] = 0
-countEq compFunc (x:xs) (y:ys) = case compFunc x y of
-    GT        -> countEq compFunc (x:xs) ys
-    LT        -> countEq compFunc xs (y:ys)
-    otherwise -> 1 + countEq compFunc xs ys
-
--- |Given count the number of element that are equal, without repitition
---  in two lists
-numEqElem :: (Eq t, Ord t) => (t -> t -> Ordering) -> [t] -> [t] -> Int
-numEqElem compFunc a b = countEq compFunc (sortBy compFunc a) (sortBy compFunc b)
-
--- |Get the number of cards in the answer are also in the guess
-numCorrect :: [Card] -> [Card] -> Int
-numCorrect t g = numEqElem (compare) t g
-
-
--- |Given a list of cards, get the minimum rank of the cards
-getMinRank :: [Card] -> Rank
-getMinRank cards = minimum (map getRank cards)
-
--- |Given a list of cards, get the maximum rank of the cards
-getMaxRank :: [Card] -> Rank
-getMaxRank cards = maximum (map getRank cards)
 
 getRank :: Card -> Rank
 getRank (Card _ rank) = rank
@@ -53,25 +26,37 @@ getRank (Card _ rank) = rank
 getSuit :: Card -> Suit
 getSuit (Card suit _) = suit
 
--- |Get number of cards in the answer have the same rank as
---  a card in the guess
-numSameRank :: [Card] -> [Card] -> Int
-numSameRank t g = numEqElem (comparing getRank) t g
+countEq :: (Ord a) => (a -> a -> Ordering) -> [a] -> [a] -> (Int, [a], [a])
+countEq compFunc [] [] = (0, [], [])
+countEq compFunc ts [] = (0, ts, [])
+countEq compFunc [] gs = (0, [], gs)
+countEq compFunc (t:ts) (g:gs) = case t `compFunc` g of 
+  GT        -> countEq compFunc (t:ts) gs
+  LT        -> countEq compFunc ts (g:gs)
+  otherwise -> (countEq compFunc ts gs) `combine` 1
+    where combine (x1, y1, z1) x2 = (x1+x2, y1, z1)
 
--- |Get number of cards in the answer have the same suit as
---  a card in the guess
-numSameSuit :: [Card] -> [Card] -> Int
-numSameSuit t g = numEqElem (comparing getSuit) t g
+countCorrect :: [Card] -> [Card] -> Int
+countCorrect ts gs = a where (a, _, _) = countEq compare ts gs
 
--- |Get number of cards cards in the answer have rank
---  lower than the lowest rank in the guess
-numLowerRank :: [Card] -> Rank -> Int
-numLowerRank cards min = length (filter (\c -> (getRank c) < min) cards)
+countSameSuit :: [Card] -> [Card] -> Int
+countSameSuit ts gs = a where (a, _, _) = countEq (comparing getSuit) ts gs
 
--- |Get number of cards cards in the answer have rank
---  higher than the highest rank in the guess
-numHigherRank :: [Card] -> Rank -> Int
-numHigherRank cards max = length (filter (\c -> (getRank c) > max) cards)
+
+
+dropWhileAndCount :: (a -> Bool) -> [a] -> (Int, [a])
+dropWhileAndCount f ls = fun f 0 ls
+  where fun f n [] = (n, [])
+        fun f n (x:xs) = if f x then fun f (n+1) xs else (n, x:xs)
+
+
+getRankInfo :: [Rank] -> [Rank] -> (Int, Int, Int)
+getRankInfo ts gs = (nlr, nsr, nhr)
+  where minR = head gs
+        (nlr, newts) = dropWhileAndCount (<minR) ts
+        (nsr, tsHigher, _) = countEq compare newts gs
+        nhr = length tsHigher
+
 
 
 -- |Get a 5-tuple representing the feedback of a guess, which contains
@@ -79,11 +64,16 @@ numHigherRank cards max = length (filter (\c -> (getRank c) > max) cards)
 feedback :: [Card] -> [Card] -> (Int,Int,Int,Int,Int)
 feedback ts gs
     | (length ts) /= (length gs) = error "number of cards in guess and answer does not match"
-    | otherwise                  = (numCorrect ts gs,
-                                    numLowerRank ts (getMinRank gs),
-                                    numSameRank ts gs,
-                                    numHigherRank ts (getMaxRank gs),
-                                    numSameSuit ts gs)
+    | otherwise                  = feedbackOfSorted (sort ts) (sort gs)
+
+feedbackOfSorted :: [Card] -> [Card] -> (Int,Int,Int,Int,Int)
+feedbackOfSorted ts gs = (countCorrect ts gs,
+                          nlr, nsr, nhr,
+                          countSameSuit ts gs)
+  where tsRanks = sort $ map getRank ts
+        gsRanks = sort $ map getRank gs
+        (nlr, nsr, nhr) = getRankInfo tsRanks gsRanks
+
 
 
 chooseK :: (Eq a) => [a] -> Int -> [[a]]
@@ -125,11 +115,11 @@ initialGuess x
 
 satisfyFeedback :: (Int,Int,Int,Int,Int) -> [Card] -> [Card] -> Bool
 satisfyFeedback lastFeedback lastGuess newGuess
-    = lastFeedback == (feedback newGuess lastGuess)
+    = lastFeedback == (feedbackOfSorted newGuess lastGuess)
 
 binFeedbacks :: [Card] -> [[Card]] -> [Int]
 binFeedbacks guess others = map length grouped
-    where grouped = (group . sort) [feedback answer guess | answer <- others]
+    where grouped = (group . sort) [feedbackOfSorted answer guess | answer <- others]
 
 magicFormula :: [Int] -> Int
 magicFormula bin = (sum (map (^2) bin)) `div` (sum bin)
